@@ -1,6 +1,6 @@
 
 provider "proxmox" {
-  pm_api_url        = "https://pve.gh.rayne.ru:8006/api2/json"
+  pm_api_url        = var.pvenode
   pm_tls_insecure   = true
 }
 
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "advanced_features" {
   swap              = 512
   onboot            = true
   start             = true
-  ssh_public_keys   = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID/xEu2X/rTofe8ofiJXv6E+B6qW/Ru1zriBG7VsjYKC rayne@mail.ru"
+  ssh_public_keys   = var.sshkeys
   // Terraform will crash without rootfs defined
   rootfs {
     storage         = "local"
@@ -28,8 +28,8 @@ resource "proxmox_lxc" "advanced_features" {
   network {
     name            = "eth0"
     bridge          = "vmbr0"
-    ip              = "192.168.1.141/24"
-    gw              = "192.168.1.1"
+    ip              = var.localip
+    gw              = var.localgw
     ip6             = "auto"
   }
 }
